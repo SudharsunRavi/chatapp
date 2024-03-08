@@ -17,7 +17,7 @@ const register = asyncHandler(async(req, res) => {
     if (usernameExists.rows.length) res.status(400).json({ error: "Username already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword)
+    //console.log(hashedPassword)
 
     const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
     const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
@@ -55,13 +55,44 @@ const register = asyncHandler(async(req, res) => {
   }
 });
 
-// export const login=async(req,res)=>{
-    
-// }
+const login=asyncHandler(async(req,res)=>{
+    try {
+      const {username,password}=req.body;
+      const usernameExists=await database.query(authQueries.usernameExists,[username]);
+      const isPasswordCorrect= await bcrypt.compare(password,usernameExists.rows[0].password);
 
-// export const logout=async(req,res)=>{
-    
-// }
+      if(!usernameExists || !isPasswordCorrect) res.status(400).json({error:"Invalid username or password"});
 
-module.exports={register};
+      const generateTokenAndSetCookie = (id, res) => {
+        const token = jwt.sign({id}, "susan", {
+          expiresIn: "10d",
+        });
+    
+        res.cookie("jwt", token, {
+            http: true,
+            sameSite: "strict"
+        });
+      };
+
+      generateTokenAndSetCookie(usernameExists.id, res);
+      res.status(201).json({message:"User logged in successfully"});
+
+    } catch (error) {
+      res.status(500).json({error:"Internal server error"+error});
+    }
+});
+
+const logout=async(req,res)=>{
+    try {
+      res.cookie("jwt", "", {
+        http: true,
+        sameSite: "strict",
+      });
+      res.status(200).json({message:"User logged out successfully"});
+    } catch (error) {
+      res.status(500).json({error:"Internal server error"+error});
+    }
+}
+
+module.exports={register, login, logout};
 
