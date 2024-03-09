@@ -29,3 +29,4 @@ CREATE TABLE conversation_messages (
  message_id INTEGER REFERENCES messages(id) ON DELETE CASCADE,
  PRIMARY KEY (conversation_id, message_id)
 );
+s
