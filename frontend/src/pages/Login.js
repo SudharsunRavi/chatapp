@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 const Login = () => {
   return (
     <div className="flex flex-col justify-center items-center h-screen">
@@ -22,7 +24,7 @@ const Login = () => {
             </div>
 
             <div className="mt-2">
-                <span className="text-sm">New user? <a className="text-primary cursor-pointer">SignUp</a></span>
+                <Link to="/signup" className="text-primary cursor-pointer text-sm">New user? Signup</Link>
             </div>
         </div>
     </div>
