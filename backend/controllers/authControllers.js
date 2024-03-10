@@ -59,17 +59,20 @@ const register = asyncHandler(async (req, res) => {
             profile_pic,
         ]);
 
-        const newUser = newUserResult.rows[0];
+        console.log(newUserResult);
 
-        if (newUser) {
+        // Check if the query executed successfully and affected rows
+        if (newUserResult.rowCount === 1) {
+            const newUser = {
+                id: newUserResult.rows[0]?.id,
+                full_name,
+                username,
+                profile_pic,
+            };
+
             generateTokenAndSetCookie(newUser.id, res);
             console.log("User registered successfully:", newUser);
-            return res.status(201).json({
-                id: newUser.id,
-                full_name: newUser.full_name,
-                username: newUser.username,
-                profile_pic: newUser.profile_pic,
-            });
+            return res.status(201).json(newUser);
         } else {
             console.log("Invalid user data");
             return res.status(400).json({ error: "Invalid user data" });
