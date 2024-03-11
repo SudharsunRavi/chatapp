@@ -1,6 +1,7 @@
 import { useState } from "react"
 import toast from "react-hot-toast"
 import axios from 'axios'
+import { useAuthContext } from "../context/authContext"
 
 const handleInput = ({ full_name, username, password, confirmPassword, gender }) => {
   if (!full_name || !username || !password || !confirmPassword || !gender) {
@@ -18,11 +19,17 @@ const handleInput = ({ full_name, username, password, confirmPassword, gender })
     return false
   }
 
+  if (username.length < 6) {
+    toast.error('Username must be at least 6 characters!')
+    return false
+  }
+
   return true;
 }
 
 const useSignup = () => {
     const [loading, setLoading] = useState(false);
+    const { user, setUser } = useAuthContext();
   
     const signup = async ({ full_name, username, password, confirmPassword, gender }) => {
         try {
@@ -43,12 +50,16 @@ const useSignup = () => {
                 },
             });
 
-            console.log(response.data); // Log the response data
+            //console.log(response.data);
+            localStorage.setItem('user', JSON.stringify(response.data));
+            setUser(response.data);
+
         } catch (error) {
             if (error.response && error.response.data) {
-                console.error("Server Error:", error.response.data.error); // Log the specific error message
+                console.error("Server Error:", error.response.data.error);
+                toast.error(error.response.data.error);
             } else {
-                console.error("Error:", error.message); // Log the generic error message
+                console.error("Error:", error.message); 
             }
         } finally {
             setLoading(false);

@@ -21,7 +21,7 @@ const register = asyncHandler(async (req, res) => {
     try {
         const { full_name, username, password, confirmPassword, gender } = req.body;
 
-        console.log("Received registration request:", req.body);
+        //console.log("Received registration request:", req.body);
 
         if (!full_name || !username || !password || !confirmPassword || !gender) {
             console.log("Invalid user data: All fields are required");
@@ -59,9 +59,8 @@ const register = asyncHandler(async (req, res) => {
             profile_pic,
         ]);
 
-        console.log(newUserResult);
+        //console.log(newUserResult);
 
-        // Check if the query executed successfully and affected rows
         if (newUserResult.rowCount === 1) {
             const newUser = {
                 id: newUserResult.rows[0]?.id,
@@ -71,14 +70,14 @@ const register = asyncHandler(async (req, res) => {
             };
 
             generateTokenAndSetCookie(newUser.id, res);
-            console.log("User registered successfully:", newUser);
+            //console.log("User registered successfully:", newUser);
             return res.status(201).json(newUser);
         } else {
-            console.log("Invalid user data");
+            //console.log("Invalid user data");
             return res.status(400).json({ error: "Invalid user data" });
         }
     } catch (error) {
-        console.error("Internal server error", error);
+        //console.error("Internal server error", error);
         return res.status(500).json({ error: "Internal server error" });
     }
 });
@@ -104,7 +103,7 @@ const login = asyncHandler(async (req, res) => {
         return res.status(200).json({ message: "User logged in successfully" });
 
     } catch (error) {
-        console.error("Internal server error", error);
+        //console.error("Internal server error", error);
         return res.status(500).json({ message: "Internal server error" });
     }
 });
@@ -117,7 +116,7 @@ const logout = async (req, res) => {
         });
         return res.status(200).json({ message: "User logged out successfully" });
     } catch (error) {
-        console.error("Internal server error", error);
+        //console.error("Internal server error", error);
         return res.status(500).json({ message: "Internal server error" });
     }
 };

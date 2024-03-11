@@ -1,6 +1,4 @@
 import { useState } from "react"
-import toast from "react-hot-toast"
-
 import { Link } from "react-router-dom"
 import useSignup from "../hooks/useSignup"
 
@@ -14,7 +12,7 @@ const SignUp = () => {
         gender:""
     })
 
-    const {loading, signup}=useSignup()
+    const {loading, signup}=useSignup();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -53,19 +51,22 @@ const SignUp = () => {
 
                     <div className="join">
                         <input className="join-item btn" type="radio" name="gender" aria-label="Male" value="male" onChange={(e)=>setInput({...input, gender:e.target.value})} />
-                        <input className="join-item btn" type="radio" name="gender" aria-label="female" value="female" onChange={(e)=>setInput({...input, gender:e.target.value})} />
+                        <input className="join-item btn" type="radio" name="gender" aria-label="Female" value="female" onChange={(e)=>setInput({...input, gender:e.target.value})} />
                     </div>
 
-                    <button className="btn btn-primary w-full mt-6" >Sign Up</button>
+                    {loading ? (
+                            <span className="loading loading-spinner"></span>
+                        ) : (
+                            <button className="btn btn-primary w-full mt-6" disabled={loading}>Sign Up</button>
+                        )
+                    }
                   </form>
-                  
-                  
-              </div>
+                </div>
   
               <div className="mt-2">
-                  <Link to="/login" className="text-primary cursor-pointer text-sm">Already a user? Sign In</Link>
+                <Link to="/login" className="text-primary cursor-pointer text-sm">Already a user? Sign In</Link>
               </div>
-          </div>
+        </div>
       </div>
     )
   }

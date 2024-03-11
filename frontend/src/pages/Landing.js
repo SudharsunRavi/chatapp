@@ -1,10 +1,18 @@
+import { useEffect } from "react";
 import ConversationSidebar from "../components/ConversationSidebar"
 import MessagesContainer from "../components/Messages/MessagesContainer"
+import LogoutBtn from "../components/Messages/LogoutBtn";
+import toast from "react-hot-toast";
 
 const Landing = () => {
-  return (
-    <div className="flex justify-center sm:h-[450px] md:h-[550px] overflow-hidden mt-[8%]">
+    useEffect(()=>{
+        toast.success('Logged in successfully');
+    },[])
 
+  return (
+
+    <div className="flex justify-center sm:h-[450px] md:h-[550px] overflow-hidden mt-[8%]">
+        
        <div className="flex flex-col items-center justify-center border border-slate-600 rounded-l-lg px-6 py-8">
             <div className="join">
                 <div>
@@ -22,12 +30,17 @@ const Landing = () => {
             <ConversationSidebar/>
             <ConversationSidebar/>
             <ConversationSidebar/>
+
+            <div>
+                <LogoutBtn/>
+            </div>
         </div>
 
         <div className="border border-slate-600 rounded-r-lg px-6 py-8">
             <MessagesContainer/>
+            
+            
         </div>
-
     </div>
   )
 }

@@ -17,6 +17,7 @@ const MessagesContainer = () => {
       <div className="fixed bottom-[110px] w-[270px]">
         <SendMessage />
       </div>
+      
     </div>
   );
 };
