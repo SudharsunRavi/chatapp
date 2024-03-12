@@ -1,7 +1,12 @@
+import useGetUsers from "../../hooks/useGetUsers";
 import Messages from "./Messages"
 import SendMessage from "./SendMessage"
 
 const MessagesContainer = () => {
+
+  const {loading, conversation}=useGetUsers();
+  console.log(conversation)
+
   return (
     <div className="flex flex-col h-screen">
       <div>

@@ -29,7 +29,7 @@ const handleInput = ({ full_name, username, password, confirmPassword, gender })
 
 const useSignup = () => {
     const [loading, setLoading] = useState(false);
-    const { user, setUser } = useAuthContext();
+    const { setUser } = useAuthContext();
   
     const signup = async ({ full_name, username, password, confirmPassword, gender }) => {
         try {

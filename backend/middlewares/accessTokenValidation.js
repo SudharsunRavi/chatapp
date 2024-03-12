@@ -9,7 +9,7 @@ const validateAccessToken = async (req, res, next) => {
             return res.status(401).json({ error: "Unauthorized - No Token Provided" });
         }
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, "susan");
 
         if (!decoded) {
             return res.status(401).json({ error: "Unauthorized - Invalid Token" });
@@ -37,6 +37,9 @@ const validateAccessToken = async (req, res, next) => {
         };
 
         req.user = user;
+
+        // Set the token as a cookie in the response
+        res.cookie('jwt', token, { httpOnly: true });
 
         next();
     } catch (error) {

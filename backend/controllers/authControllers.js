@@ -6,22 +6,23 @@ const database = require("../dbConnect");
 const authQueries = require("../queries/authQueries");
 
 const generateTokenAndSetCookie = (id, res) => {
-    const token = jwt.sign({ id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id }, "susan", {
         expiresIn: "10d",
     });
 
+    console.log("Generated token:", token);
+
     res.cookie("jwt", token, {
-        http: true,
+        maxAge: 15 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
         sameSite: "strict",
-        secure: process.env.NODE_ENV === "production", // Set secure only in production
+        secure: process.env.NODE_ENV !== "development",
     });
 };
 
 const register = asyncHandler(async (req, res) => {
     try {
         const { full_name, username, password, confirmPassword, gender } = req.body;
-
-        //console.log("Received registration request:", req.body);
 
         if (!full_name || !username || !password || !confirmPassword || !gender) {
             console.log("Invalid user data: All fields are required");
@@ -59,8 +60,6 @@ const register = asyncHandler(async (req, res) => {
             profile_pic,
         ]);
 
-        //console.log(newUserResult);
-
         if (newUserResult.rowCount === 1) {
             const newUser = {
                 id: newUserResult.rows[0]?.id,
@@ -70,19 +69,15 @@ const register = asyncHandler(async (req, res) => {
             };
 
             generateTokenAndSetCookie(newUser.id, res);
-            //console.log("User registered successfully:", newUser);
             return res.status(201).json(newUser);
         } else {
-            //console.log("Invalid user data");
             return res.status(400).json({ error: "Invalid user data" });
         }
     } catch (error) {
-        //console.error("Internal server error", error);
+        console.error("Internal server error:", error);
         return res.status(500).json({ error: "Internal server error" });
     }
 });
-
-
 
 const login = asyncHandler(async (req, res) => {
     try {
@@ -103,20 +98,20 @@ const login = asyncHandler(async (req, res) => {
         return res.status(200).json({ message: "User logged in successfully" });
 
     } catch (error) {
-        //console.error("Internal server error", error);
+        console.error("Internal server error:", error);
         return res.status(500).json({ message: "Internal server error" });
     }
 });
 
 const logout = async (req, res) => {
     try {
-        res.cookie("jwt", "", {
-            http: true,
+        res.clearCookie("jwt", {
+            httpOnly: true,
             sameSite: "strict",
         });
         return res.status(200).json({ message: "User logged out successfully" });
     } catch (error) {
-        //console.error("Internal server error", error);
+        console.error("Internal server error:", error);
         return res.status(500).json({ message: "Internal server error" });
     }
 };
