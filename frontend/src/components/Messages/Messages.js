@@ -1,9 +1,17 @@
+import useMessages from "../../hooks/useMessages"
 import SingleMessage from "./SingleMessage"
 
 const Messages = () => {
+
+  const {messages} = useMessages();
+  console.log(messages)
+
   return (
     <div>
-        <SingleMessage/>
+      {messages?.map((message)=>(
+          <SingleMessage key={message.id} message={message}/>
+      ))}
+
     </div>
   )
 }

@@ -22,8 +22,8 @@ const useLogin = () => {
             localStorage.setItem('user', JSON.stringify(response.data));
             setUser(response.data);
             //console.log(response)
-            const jwtToken = response.data.token;
-            console.log(jwtToken)
+            //const jwtToken = response.data.token;
+            //console.log(jwtToken)
         } catch (error) {
             toast.error(`Server error! ${error}. Please try again.`)
         } finally {

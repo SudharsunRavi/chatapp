@@ -11,7 +11,7 @@ const generateTokenAndSetCookie = (id, res) => {
         expiresIn: "10d",
     });
 
-    console.log("Generated token:", token);
+    //console.log("Generated token:", token);
 
     let cookieOptions = {
         maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days

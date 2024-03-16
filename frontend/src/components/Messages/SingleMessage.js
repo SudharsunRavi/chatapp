@@ -1,4 +1,11 @@
+import { useAuthContext } from "../../context/authContext"
+import useConversation from "../../zustand_store/useConversation";
+
 const SingleMessage = () => {
+
+    const {user}=useAuthContext();
+    const {selectedConversation} = useConversation();
+
   return (
     <div>
         <div className="chat chat-start">

@@ -1,16 +1,21 @@
-const ConversationSidebar = () => {
+import useConversation from "../zustand_store/useConversation"
+
+const ConversationSidebar = ({conversation}) => {
+  //console.log(conversation)
+  const {selectedConversation, setSelectedConversation}=useConversation();
+  const isSelected=selectedConversation?.id===conversation.id;
+
   return (
-    <div className="flex w-72">
+    <div className={`flex w-72 h-[60px] pt-[6px] pl-1 ${isSelected ? "bg-primary" : ""} `} onClick={()=>setSelectedConversation(conversation)}>
         <div>
-            <img src='https://cdn0.iconfinder.com/data/icons/communication-line-10/24/account_profile_user_contact_person_avatar_placeholder-512.png' 
+            <img src={conversation.profile_pic} 
                     alt="user"
-                    className="h-16 rounded-full"
-            />
+                    className="h-12 rounded-full"
+            /><br/>
         </div>
 
-        <div className="flex gap-24 mt-5">
-            <h1 className="text-lg">Sudharsun</h1>
-            <span className="text-xl">🔥</span>
+        <div className="flex items-stretch justify-between mt-2 ml-2">
+            <h1 className="text-lg">{conversation.full_name}</h1>
         </div>
     </div>
   )

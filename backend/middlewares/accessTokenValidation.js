@@ -15,7 +15,7 @@ const validateAccessToken = async (req, res, next) => {
             return res.status(401).json({ error: "Unauthorized - Invalid Token" });
         }
 
-        console.log(decoded);
+        //console.log(decoded);
         const userId = decoded.id;
 
         const getUserQuery = `
@@ -29,18 +29,13 @@ const validateAccessToken = async (req, res, next) => {
             return res.status(404).json({ error: "User not found" });
         }
 
-        // Exclude password from the user object
         const user = {
             id: rows[0].id,
             username: rows[0].username,
-            // Add other user fields as needed
         };
 
         req.user = user;
-
-        // Set the token as a cookie in the response
         res.cookie('jwt', token, { httpOnly: true });
-
         next();
     } catch (error) {
         console.error("Error in validateAccessToken middleware:", error.message);
