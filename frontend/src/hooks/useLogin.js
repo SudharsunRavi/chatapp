@@ -23,7 +23,7 @@ const useLogin = () => {
             setUser(response.data);
             //console.log(response)
             const jwtToken = response.data.token;
-            //console.log(jwtToken)
+            console.log(jwtToken)
         } catch (error) {
             toast.error(`Server error! ${error}. Please try again.`)
         } finally {

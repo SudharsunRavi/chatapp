@@ -5,6 +5,7 @@ const asyncHandler = require("express-async-handler");
 const database = require("../dbConnect");
 const authQueries = require("../queries/authQueries");
 
+
 const generateTokenAndSetCookie = (id, res) => {
     const token = jwt.sign({ id }, "susan", {
         expiresIn: "10d",
@@ -12,12 +13,14 @@ const generateTokenAndSetCookie = (id, res) => {
 
     console.log("Generated token:", token);
 
-    res.cookie("jwt", token, {
-        maxAge: 15 * 24 * 60 * 60 * 1000,
+    let cookieOptions = {
+        maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
         httpOnly: true,
-        sameSite: "strict",
-        secure: process.env.NODE_ENV !== "development",
-    });
+        sameSite: "strict", 
+        secure: false, 
+    };
+
+    res.cookie("jwt", token, cookieOptions);
 };
 
 const register = asyncHandler(async (req, res) => {
@@ -94,9 +97,11 @@ const login = asyncHandler(async (req, res) => {
             return res.status(400).json({ message: "Invalid username or password" });
         }
 
-        generateTokenAndSetCookie(usernameExists.rows[0].id, res);
-        return res.status(200).json({ message: "User logged in successfully" });
+        const userId = usernameExists.rows[0].id;
 
+        const token = jwt.sign({ userId }, "susan", { expiresIn: "10d" });
+        generateTokenAndSetCookie(userId, res);
+        return res.status(200).json({ message: "User logged in successfully", token });
     } catch (error) {
         console.error("Internal server error:", error);
         return res.status(500).json({ message: "Internal server error" });

@@ -1,6 +1,7 @@
 const database=require('../dbConnect');
+const asyncHandler=require('express-async-handler');
 
-const getUsers = async (req, res) => {
+const getUsers =asyncHandler(async(req, res) => {
     try {
         const loggedInUserId = req.user.id;
 
@@ -18,6 +19,6 @@ const getUsers = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: "Internal server error" + error });
     }
-};
+});
 
 module.exports = {getUsers};
